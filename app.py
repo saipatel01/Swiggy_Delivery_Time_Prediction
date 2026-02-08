@@ -7,11 +7,20 @@ import pickle
 import os
 import gdown
 
-# Download model from Google Drive if not present
-if not os.path.exists("model.pkl"):
-    file_id = "18DUwaTypnR462Bva_f6i230Er4CMANuf"
-    url = f"https://drive.google.com/uc?id={file_id}"
-    gdown.download(url, "model.pkl", quiet=False)
+@st.cache_resource
+def load_model():
+    if not os.path.exists("model.pkl"):
+        file_id = "18DUwaTypnR462Bva_f6i230Er4CMANuf"
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, "model.pkl", quiet=False)
+
+    with open("model.pkl", "rb") as f:
+        model = pickle.load(f)
+
+    return model
+
+model = load_model()
+
 
 
 st.title("Swiggy Delivery Time Prediction")
@@ -43,8 +52,6 @@ data = pd.DataFrame([[age,ratings,weather,traffic,
                vehicle_condition,type_of_vehicle,multiple_deliveries,
                festival,city_name,is_weekend,pickup_time_minutes,
                order_time_hour,distance]],columns=X.columns)
-with open(r'model.pkl','rb') as file:
-    model = pickle.load(file)
 
 if st.button("Predict"):
     time = model.predict(data)[0]
