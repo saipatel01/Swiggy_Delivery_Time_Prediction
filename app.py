@@ -4,6 +4,15 @@ import pandas as pd
 from sklearn.preprocessing import OneHotEncoder,OrdinalEncoder,StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 import pickle
+import os
+import gdown
+
+# Download model from Google Drive if not present
+if not os.path.exists("model.pkl"):
+    file_id = "18DUwaTypnR462Bva_f6i230Er4CMANuf"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    gdown.download(url, "model.pkl", quiet=False)
+
 
 st.title("Swiggy Delivery Time Prediction")
 df = pd.read_csv(r'swiggy_cleaned.csv')
