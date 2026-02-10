@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder,OrdinalEncoder,StandardScaler
 from sklearn.ensemble import RandomForestRegressor
-import pickle
+import joblib
 
 st.title("Swiggy Delivery Time Prediction")
 df = pd.read_csv(r'swiggy_cleaned.csv')
@@ -34,8 +34,7 @@ data = pd.DataFrame([[age,ratings,weather,traffic,
                vehicle_condition,type_of_vehicle,multiple_deliveries,
                festival,city_name,is_weekend,pickup_time_minutes,
                order_time_hour,distance]],columns=X.columns)
-with open(r'model.pkl','rb') as file:
-    model = pickle.load(file)
+model = joblib.load("model.pkl")
 
 if st.button("Predict"):
     time = model.predict(data)[0]
